@@ -1,0 +1,162 @@
+<template>
+  <div>
+    <h1>POKEMON</h1>
+    <div>
+      <input v-model="nombrePokemon" placeholder="Escribe el nombre del Pokémon" />
+      <button @click="searchPokemon" :disabled="cargando">Buscar Pokémon</button>
+      <button @click="fetchPokemons" :disabled="cargando">Cargar Lista de Pokémon</button>
+    </div>
+    <div v-if="cargando">Cargando...</div>
+    <div v-else-if="error">{{ error }}</div>
+    <div v-else>
+      <ul>
+        <li v-for="pokemon in pokemons" :key="pokemon.name">
+          <img :src="pokemon.sprites.front_default" :alt="pokemon.name" />
+          {{ pokemon.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+
+
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const pokemons = ref([])
+const cargando = ref(false)
+const error = ref(null)
+const nombrePokemon = ref('')
+
+const fetchPokemons = async () => {
+  cargando.value = true
+  error.value = null
+  try {
+    const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=999')
+    const results = response.data.results
+    // Obtener detalles de cada Pokémon para incluir imágenes
+    const pokemonDetails = await Promise.all(
+      results.map(async (pokemon) => {
+        const detailResponse = await axios.get(pokemon.url)
+        return detailResponse.data
+      })
+    )
+    pokemons.value = pokemonDetails
+  } catch (err) {
+    error.value = 'Error al cargar los Pokémon'
+    console.error(err)
+  } finally {
+    cargando.value = false
+  }
+}
+
+const searchPokemon = async () => {
+  if (!nombrePokemon.value.trim()) {
+    error.value = 'Por favor, escribe un nombre de Pokémon'
+    return
+  }
+  cargando.value = true
+  error.value = null
+  try {
+    const response = await axios.get(https://pokeapi.co/api/v2/pokemon/${nombrePokemon.value.toLowerCase()})
+    pokemons.value = [response.data] // Mostrar solo el Pokémon buscado
+  } catch (err) {
+    error.value = 'Pokémon no encontrado'
+    console.error(err)
+  } finally {
+    cargando.value = false
+  }
+}
+</script>
+
+<style scoped>
+.pokemon-card {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.pokemon-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  z-index: -1;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.pokemon-image {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.pokemon-image:hover {
+  transform: scale(1.05);
+}
+
+h2 {
+  font-size: 1.5em;
+  margin: 10px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+p {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+.stats {
+  margin-top: 15px;
+}
+
+.stats h3 {
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 0.9em;
+}
+
+.stat-name {
+  text-transform: capitalize;
+}
+
+.stat-value {
+  font-weight: bold;
+}
+</style>
