@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="container">
-      <h1>Mi Pokédex</h1>
+      <h1>Elige pokemon!! </h1>
       
       <div class="search-container">
         <input 
@@ -90,14 +90,14 @@ export default {
     },
 
     obtenerDebilidades(tipos) {
-      const promesasTipos = tipos.map(tipoInfo => 
+      const promesasTipos = tipos.map(tipoInfo =>
         fetch(tipoInfo.type.url).then(res => res.json())
       );
 
       Promise.all(promesasTipos)
         .then(datosTipos => {
           const todasDebilidades = new Set();
-          
+
           datosTipos.forEach(tipoData => {
             tipoData.damage_relations.double_damage_from.forEach(danio => {
               todasDebilidades.add(danio.name);
@@ -124,9 +124,9 @@ export default {
 }
 
 body {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #9b6a8aff 0%, #b094ccff 100%);
   min-height: 100vh;
-  padding: 20px;
+  padding: 30px;
 }
 
 .container {
@@ -140,7 +140,7 @@ body {
 
 h1 {
   text-align: center;
-  color: #333;
+  color: #42373fff;
   margin-bottom: 30px;
   font-size: 2.5em;
 }
@@ -163,7 +163,7 @@ h1 {
 
 .search-button {
   padding: 12px 25px;
-  background: #ff6b6b;
+  background: #fd8787ff;
   color: white;
   border: none;
   border-radius: 25px;

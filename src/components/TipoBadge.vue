@@ -1,7 +1,7 @@
 <template>
-  <span 
+  <span
     :class="['type-badge', 'type-' + tipo]"
-    :style="{ backgroundColor: color }"
+    :style="{ backgroundColor: coloresTipos[tipo] || '#777' }"
   >
     {{ tipo }}
   </span>
@@ -18,9 +18,9 @@ export default {
       required: true
     }
   },
-  computed: {
-    color() {
-      return coloresTipos[this.tipo] || '#777';
+  data() {
+    return {
+      coloresTipos
     }
   }
 }
@@ -35,5 +35,13 @@ export default {
   text-transform: capitalize;
   font-size: 14px;
   display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.type-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 </style>
