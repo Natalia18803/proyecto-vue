@@ -2,18 +2,18 @@
   <div id="app">
     <div class="container">
       <h1>Elige pokemon!! </h1>
-      
+
       <div class="search-container">
-        <input 
-          v-model="pokemonId" 
-          v-on:keyup.enter="buscarPokemon"
-          type="number" 
+        <input
+          v-model="pokemonId"
+          v-on:keyup.enter="buscarPokemonLocal"
+          type="number"
           placeholder="ID del Pokémon (1-999)"
           min="1"
           max="999"
           class="search-input"
         >
-        <button v-on:click="buscarPokemon" class="search-button">Buscar</button>
+        <button v-on:click="buscarPokemonLocal" class="search-button">Buscar</button>
       </div>
 
       <div v-if="mostrarError" class="error-message">
@@ -24,11 +24,7 @@
         Cargando Pokémon...
       </div>
 
-      <PokemonCard 
-        v-if="pokemon && !cargando"
-        :pokemon="pokemon"
-        :debilidades="debilidades"
-      />
+      <PokemonCard v-if="pokemon && !cargando" :pokemon="pokemon" :debilidades="debilidades" />
 
       <div v-if="!pokemon && !cargando && !mostrarError" class="loading">
         Ingresa un ID del 1 al 999 para buscar un Pokémon
@@ -37,81 +33,20 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue'
 import PokemonCard from './components/PokemonCard.vue'
+import { buscarPokemon } from './utils/functions.js'
 
-export default {
-  name: 'App',
-  components: {
-    PokemonCard
-  },
-  data() {
-    return {
-      pokemonId: '',
-      pokemon: null,
-      cargando: false,
-      mostrarError: false,
-      mensajeError: '',
-      debilidades: []
-    }
-  },
-  methods: {
-    buscarPokemon() {
-      const id = parseInt(this.pokemonId);
-      if (isNaN(id) || id < 1 || id > 999) {
-        this.mostrarError = true;
-        this.mensajeError = 'Por favor, ingresa un número entre 1 y 999';
-        this.pokemon = null;
-        return;
-      }
+const pokemonId = ref('')
+const pokemon = ref(null)
+const cargando = ref(false)
+const mostrarError = ref(false)
+const mensajeError = ref('')
+const debilidades = ref([])
 
-      this.cargando = true;
-      this.mostrarError = false;
-      this.pokemon = null;
-      this.debilidades = [];
-
-      fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Pokémon no encontrado');
-          }
-          return response.json();
-        })
-        .then(data => {
-          this.pokemon = data;
-          this.obtenerDebilidades(data.types);
-          this.cargando = false;
-        })
-        .catch(error => {
-          this.mostrarError = true;
-          this.mensajeError = error.message;
-          this.cargando = false;
-        });
-    },
-
-    obtenerDebilidades(tipos) {
-      const promesasTipos = tipos.map(tipoInfo =>
-        fetch(tipoInfo.type.url).then(res => res.json())
-      );
-
-      Promise.all(promesasTipos)
-        .then(datosTipos => {
-          const todasDebilidades = new Set();
-
-          datosTipos.forEach(tipoData => {
-            tipoData.damage_relations.double_damage_from.forEach(danio => {
-              todasDebilidades.add(danio.name);
-            });
-          });
-
-          this.debilidades = Array.from(todasDebilidades);
-        })
-        .catch(error => {
-          console.error('Error obteniendo debilidades:', error);
-          this.debilidades = [];
-        });
-    }
-  }
+function buscarPokemonLocal() {
+  buscarPokemon(pokemonId, mostrarError, mensajeError, pokemon, cargando, debilidades)
 }
 </script>
 
@@ -120,11 +55,11 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Rackety DEMO';
 }
 
 body {
-  background: linear-gradient(135deg, #9b6a8aff 0%, #b094ccff 100%);
+  background: url(/imgPokemon.jpg) no-repeat, center;
   min-height: 100vh;
   padding: 30px;
 }
@@ -135,7 +70,7 @@ body {
   background: white;
   border-radius: 20px;
   padding: 30px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
@@ -154,10 +89,10 @@ h1 {
 
 .search-input {
   padding: 12px 20px;
-  border: 2px solid #ddd;
+  border: 2px solid #99999942;
   border-radius: 25px;
   font-size: 16px;
-  width: 200px;
+  width: 1500px;
   text-align: center;
 }
 

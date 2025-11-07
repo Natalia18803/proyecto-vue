@@ -77,3 +77,8 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+@font-face {
+  font-family: Rackety DEMO;
+  src: url(/public/fonts/Rackety\ DEMO.otf);
+}
