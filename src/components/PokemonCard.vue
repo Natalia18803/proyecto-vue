@@ -46,6 +46,7 @@
           v-for="debilidad in debilidades"
           :key="debilidad"
           :class="['type-badge', 'type-' + debilidad]"
+          :style="{ backgroundColor: coloresTipos[debilidad] }"
         >
           {{ debilidad }}
         </span>
