@@ -275,8 +275,8 @@ function obtenerFondoGradienteLocal() {
 }
 
 .pokemon-img {
-  width: 200px;
-  height: 200px;
+  width: 210px;
+  height: 210px;
   object-fit: contain;
 }
 

@@ -57,9 +57,9 @@ function buscarPokemonLocal() {
 }
 
 body {
-  background: url(/imgPokemon.jpg) no-repeat, center;
+  background: url(/imgPokemon.jpg) center fixed;
   min-height: 100vh;
-  padding: 30px;
+
 }
 
 .container {
@@ -67,7 +67,7 @@ body {
   margin: 0 auto;
   background: white;
   border-radius: 20px;
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
