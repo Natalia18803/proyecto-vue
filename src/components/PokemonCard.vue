@@ -266,7 +266,7 @@ function obtenerFondoGradienteLocal() {
 }
 
 .pokemon-id {
-  color: #666;
+  color: #080808;
   font-weight: bold;
 }
 
@@ -295,10 +295,10 @@ function obtenerFondoGradienteLocal() {
 .type-badge {
   padding: 8px 20px;
   border-radius: 20px;
-  color: rgb(156, 156, 156);
+  color: rgb(14, 13, 13);
   font-weight: bold;
   text-transform: capitalize;
-  font-size: 14px;
+  font-size: 20px;
   display: inline-block;
 }
 
