@@ -1,8 +1,17 @@
 export function buscarPokemon(pokemonIdRef, mostrarErrorRef, mensajeErrorRef, pokemonRef, cargandoRef, debilidadesRef) {
-  const id = parseInt(pokemonIdRef.value);
-  if (isNaN(id) || id < 1 || id > 999) {
+  const query = pokemonIdRef.value.trim();
+  if (!query) {
     mostrarErrorRef.value = true;
-    mensajeErrorRef.value = 'Por favor, ingresa un número entre 1 y 999';
+    mensajeErrorRef.value = 'Por favor, ingresa un nombre o ID del Pokémon';
+    pokemonRef.value = null;
+    return;
+  }
+
+  // Si es un número, validar rango
+  const id = parseInt(query);
+  if (!isNaN(id) && (id < 1 || id > 999)) {
+    mostrarErrorRef.value = true;
+    mensajeErrorRef.value = 'Por favor, ingresa un ID válido entre 1 y 999';
     pokemonRef.value = null;
     return;
   }
@@ -12,7 +21,7 @@ export function buscarPokemon(pokemonIdRef, mostrarErrorRef, mensajeErrorRef, po
   pokemonRef.value = null;
   debilidadesRef.value = [];
 
-  fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+  fetch(`https://pokeapi.co/api/v2/pokemon/${query}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Pokémon no encontrado');
@@ -61,14 +70,10 @@ export function obtenerFondoGradiente(pokemon, coloresTipos) {
     return {
       background: `linear-gradient(135deg, ${color} 0%, ${color}99 100%)`
     };
-  } else if (tipos.length === 2) {
-    const color1 = coloresTipos[tipos[0].type.name];
-    const color2 = coloresTipos[tipos[1].type.name];
+  } else {
+    const colors = tipos.map(tipo => coloresTipos[tipo.type.name]);
     return {
-      background: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`
+      background: `linear-gradient(135deg, ${colors.join(', ')})`
     };
   }
-  return {
-    background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
-  };
 }

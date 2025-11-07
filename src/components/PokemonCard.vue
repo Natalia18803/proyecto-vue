@@ -15,10 +15,11 @@
     </div>
 
     <div class="pokemon-types">
-      <span 
-        v-for="tipoInfo in pokemon.types" 
+      <span
+        v-for="tipoInfo in pokemon.types"
         :key="tipoInfo.slot"
         :class="['type-badge', 'type-' + tipoInfo.type.name]"
+        :style="{ backgroundColor: coloresTipos[tipoInfo.type.name] }"
       >
         {{ tipoInfo.type.name }}
       </span>
@@ -27,12 +28,12 @@
     <div class="stats-section">
       <h3>Estadísticas</h3>
       <div class="stats-grid">
-        <div 
-          v-for="estadistica in pokemon.stats" 
+        <div
+          v-for="estadistica in pokemon.stats"
           :key="estadistica.stat.name"
           class="stat-item"
         >
-          <span class="stat-name">{{ nombresEstadisticas[estadistica.stat.name] || estadistica.stat.name }}</span>
+          <span class="stat-name" :style="{ color: coloresTipos[pokemon.types[0].type.name] }">{{ nombresEstadisticas[estadistica.stat.name] || estadistica.stat.name }}</span>
           <span class="stat-value">{{ estadistica.base_stat }}</span>
         </div>
       </div>

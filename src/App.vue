@@ -7,10 +7,8 @@
         <input
           v-model="pokemonId"
           v-on:keyup.enter="buscarPokemonLocal"
-          type="number"
-          placeholder="ID del Pokémon (1-999)"
-          min="1"
-          max="999"
+          type="text"
+          placeholder="Nombre o ID del Pokémon"
           class="search-input"
         >
         <button v-on:click="buscarPokemonLocal" class="search-button">Buscar</button>
